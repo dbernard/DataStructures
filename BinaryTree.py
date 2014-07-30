@@ -47,12 +47,14 @@ class BinaryTree(object):
     def delete(self, value):
         pass
 
-    def depth_first_search(self, node, value):
+    def depth_first_search(self, node, value, stats=None):
         # Check if the node we are working on has been looked at and compare the
         # value to the one we are searching for.
         if not node.discovered:
+            if stats != None:
+                stats.tick()
             if node.value == value:
-                print 'Node with value %s found!' % value
+                self._output_result(node, stats)
                 return True
 
             # Mark the node as discovered
@@ -65,7 +67,7 @@ class BinaryTree(object):
                 elif not child.discovered:
                     # If we have found our result, return True all the way back
                     # up the recursive tree.
-                    if self.depth_first_search(child, value):
+                    if self.depth_first_search(child, value, stats):
                         return True
 
     def breadth_first_search(self, value, nodes, stats=None):
@@ -87,8 +89,25 @@ class BinaryTree(object):
 
         return self.breadth_first_search(value, children, stats)
 
+    def _output_result(self, node, stats):
+        if stats == None:
+            print 'Node with value %s found!' % node.value
+        else:
+            stats.done()
+            print ( " --------------------------- \n" +
+                    " Node found!\n" +
+                    " -- %s nodes visited\n" % stats.nodes_visited +
+                    " -- %s time elapsed\n" % stats.total_time +
+                    " -- node value: %s\n" % node.value +
+                    " -- node left child: %s\n" % node.left +
+                    " -- node right child: %s\n" % node.right +
+                    " --------------------------- ")
+
+
+
 
 if __name__ == '__main__':
+    st = StatTracker()
     '''
     max = 10000
     tree = BinaryTree(random.randint(0, max))
@@ -107,6 +126,6 @@ if __name__ == '__main__':
     tree.insert(6)
     tree.insert(7)
 
-    tree.depth_first_search(tree.root, 4)
+    tree.depth_first_search(tree.root, 4, st)
 
 

@@ -1,6 +1,7 @@
 from StatTracker import StatTracker
 import random
 
+
 class Node(object):
     def __init__(self, value):
         self.left = None
@@ -11,66 +12,67 @@ class Node(object):
         return str(self.value)
 
 
-class BinarySearchTree(object):
+class BinaryTree(object):
+    # Binary Trees, unlike Binary Search Trees, are not sorted.
     def __init__(self, root_value):
-        # Initialize a tree with the root node value of (root_value)
-        self.root = self.insert(None, root_value)
+        # Initialize a Binary Tree with a root node value of (root_value)
+        self.root = self._create_node(root_value)
 
     def _create_node(self, value):
         return Node(value)
 
-    def insert(self, root, value):
-        # If root is None, we have found the location where we wish to insert
-        # our node
-        if root == None:
-            return self._create_node(value)
-        else:
-            # Traverse the LEFT side of the tree
-            if value <= root.value:
-                root.left = self.insert(root.left, value)
-            # Traverse the RIGHT side of the tree
+    def insert(self, value, nodes=None):
+        # Use a Breadth First Search to find the first empty child
+        # to ensure we fill out each row entirely and keep a balanced tree.
+        children = []
+        nodes = [self.root] if nodes is None else nodes
+        for node in nodes:
+            if node.left == None:
+                node.left = self._create_node(value)
+                return node.left
+
+            elif node.right == None:
+                node.right = self._create_node(value)
+                return node.right
+
             else:
-                root.right = self.insert(root.right, value)
-            return root
+                children.append(node.left)
+                children.append(node.right)
 
-    def search(self, value, node, stats=None):
-        # Search the tree for a given value.
-        # Track stats for the search, if requested
-        if stats != None:
-            stats.tick()
-        # If the current node doesn't exist, the value is not in our tree
-        if node == None:
-            print "No value '%s' found in tree" % value
+        return self.insert(value, children)
+
+    def delete(self, value):
+        pass
+
+    def depth_first_search(self, node, value):
+        pass
+
+    def breadth_first_search(self, value, nodes, stats=None):
+        # Check (node), store pointers to all children nodes for each node in
+        # the current level then traverse the children using the same method.
+        children = []
+        if not nodes:
+            print "Value %s not found in tree" % value
             return
-        # If the current node's value is the value we are looking for, return it
-        elif node.value == value:
-            if stats != None:
-                stats.done()
-            print ( " --------------------------- \n" +
-                    "Node found!\n" +
-                    " -- %s nodes visited\n" % stats.nodes_visited +
-                    " -- %s time elapsed\n" % stats.total_time +
-                    " -- node value: %s\n" % node.value +
-                    " -- node left child: %s\n" % node.left +
-                    " -- node right child: %s\n" % node.right +
-                    " --------------------------- ")
+        for node in nodes:
+            if node == None:
+                continue
+            elif node.value == value:
+                print 'Node with value %s found!' % value
+                return node
+            else:
+                children.append(node.left)
+                children.append(node.right)
 
-            return node
-        elif value < node.value:
-            return self.search(value, node.left, stats)
-        else:
-            return self.search(value, node.right, stats)
+        return self.breadth_first_search(value, children, stats)
 
 
 if __name__ == '__main__':
-    max = 1000000
-    tree = BinarySearchTree(random.randint(0, max))
+    max = 10000
+    tree = BinaryTree(random.randint(0, max))
     for i in range(max/2):
-        tree.insert(tree.root, random.randint(0, max))
-
-    st = StatTracker()
+        tree.insert(random.randint(0, max))
 
     for i in range(10):
-        tree.search(random.randint(0, max), tree.root, st)
-        st.reset()
+        tree.breadth_first_search(random.randint(0, max), [tree.root])
 

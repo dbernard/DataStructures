@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from StatTracker import StatTracker
 import random
 
@@ -7,6 +9,7 @@ class Node(object):
         self.left = None
         self.right = None
         self.value = value
+        self.discovered = False
 
     def __str__(self):
         return str(self.value)
@@ -45,7 +48,25 @@ class BinaryTree(object):
         pass
 
     def depth_first_search(self, node, value):
-        pass
+        # Check if the node we are working on has been looked at and compare the
+        # value to the one we are searching for.
+        if not node.discovered:
+            if node.value == value:
+                print 'Node with value %s found!' % value
+                return True
+
+            # Mark the node as discovered
+            node.discovered = True
+
+            # Recursively search the children nodes, starting with the left
+            for child in (node.left, node.right):
+                if child == None:
+                    continue
+                elif not child.discovered:
+                    # If we have found our result, return True all the way back
+                    # up the recursive tree.
+                    if self.depth_first_search(child, value):
+                        return True
 
     def breadth_first_search(self, value, nodes, stats=None):
         # Check (node), store pointers to all children nodes for each node in
@@ -68,6 +89,7 @@ class BinaryTree(object):
 
 
 if __name__ == '__main__':
+    '''
     max = 10000
     tree = BinaryTree(random.randint(0, max))
     for i in range(max/2):
@@ -75,4 +97,16 @@ if __name__ == '__main__':
 
     for i in range(10):
         tree.breadth_first_search(random.randint(0, max), [tree.root])
+    '''
+    tree = BinaryTree(1)
+
+    tree.insert(2)
+    tree.insert(5)
+    tree.insert(3)
+    tree.insert(4)
+    tree.insert(6)
+    tree.insert(7)
+
+    tree.depth_first_search(tree.root, 4)
+
 

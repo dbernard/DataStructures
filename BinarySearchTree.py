@@ -46,14 +46,14 @@ class BinarySearchTree(object):
         elif node.value == value:
             if stats != None:
                 stats.done()
-            print ( " --------------------------- \n" +
-                    "Node found!\n" +
-                    " -- %s nodes visited\n" % stats.nodes_visited +
-                    " -- %s time elapsed\n" % stats.total_time +
-                    " -- node value: %s\n" % node.value +
-                    " -- node left child: %s\n" % node.left +
-                    " -- node right child: %s\n" % node.right +
-                    " --------------------------- ")
+                print ( " --------------------------- \n" +
+                        "Node found!\n" +
+                        " -- %s nodes visited\n" % stats.nodes_visited +
+                        " -- %s time elapsed\n" % stats.total_time +
+                        " -- node value: %s\n" % node.value +
+                        " -- node left child: %s\n" % node.left +
+                        " -- node right child: %s\n" % node.right +
+                        " --------------------------- ")
 
             return node
         elif value < node.value:

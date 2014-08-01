@@ -1,4 +1,4 @@
-#!/ust/bin/python
+#!/usr/bin/python
 # This is an implementation of the majority voting algorithm. This algorithm
 # returns a value if that value is in the "majority" (if it appears more than
 # 50% of the time.

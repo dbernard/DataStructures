@@ -2,24 +2,12 @@
 class Node
 {
     private int value;
-    private boolean isRoot;
     private Node leftChild;
     private Node rightChild;
 
     public Node(int val)
     {
         value = val;
-        isRoot = false;
-    }
-
-    public void setAsRoot()
-    {
-        isRoot = true;
-    }
-
-    public boolean isRoot()
-    {
-        return isRoot;
     }
 
     public int getValue()
@@ -60,11 +48,8 @@ class BST
 
     public BST(int rootVal)
     {
-        // Insert a new Node into the tree with (null) parent and value of
-        // (rootVal)
-        Node empty = new Node(0);
-        empty.setAsRoot();
-        root = insert(empty, rootVal);
+        // Create root node
+        root = createNode(rootVal);
     }
 
     private Node createNode(int value)
@@ -78,28 +63,33 @@ class BST
         return root;
     }
 
-    public Node insert(Node root, int val)
+    public void insert(Node root, int val)
     {
-        // If root is null, we have found the location where we wish to insert
-        // our node
-        if (root == null)
+        // Traverse the left subtree
+        if (val <= root.getValue())
         {
-            return createNode(val);
-        }
-        else
-        {
-            // Traverse the left subtree
-            if (val <= root.getValue())
+            if (root.getLeftChild() == null)
             {
-                root.setLeftChild(insert(root.getLeftChild(), val));
+                root.setLeftChild(createNode(val));
+                System.out.println("Inserted " + val);
             }
-            // Traverse the right subtree
             else
             {
-                root.setRightChild(insert(root.getRightChild(), val));
+                insert(root.getLeftChild(), val);
             }
-
-            return root;
+        }
+        // Traverse the right subtree
+        else
+        {
+            if (root.getRightChild() == null)
+            {
+                root.setRightChild(createNode(val));
+                System.out.println("Inserted " + val);
+            }
+            else
+            {
+                insert(root.getRightChild(), val);
+            }
         }
     }
 

@@ -126,6 +126,6 @@ if __name__ == '__main__':
     tree.insert(6)
     tree.insert(7)
 
-    tree.depth_first_search(tree.root, 4, st)
+    tree.depth_first_search(tree.root, 7, st)
 
 
